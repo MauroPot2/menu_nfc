@@ -1,3 +1,6 @@
+#credential
+firebase_options_manual.dart
+
 # Miscellaneous
 *.class
 *.log
