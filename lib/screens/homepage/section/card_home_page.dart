@@ -1,5 +1,5 @@
+import 'dart:ui'; // Necessario per ImageFilter
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CardHomePage extends StatelessWidget {
   final String titolo;
@@ -9,44 +9,55 @@ class CardHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10.0,
-      shadowColor: const Color(
-        0xFFD4AF37,
-      ).withValues(alpha: 0.2), // Ombra leggermente dorata
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
-          child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Centra il contenuto nella griglia
-            children: <Widget>[
-              const Icon(
-                Icons.local_bar,
-                color: Color.fromARGB(255, 181, 179, 175),
-                size: 30,
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
+        // Fondamentale: taglia l'effetto sfocatura per non farlo uscire dai bordi
+        borderRadius: BorderRadius.circular(24),
+        child: BackdropFilter(
+          // Regola sigmaX e sigmaY per aumentare o dimin<uire l'intensità della sfocatura
+          filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
+          child: Container(
+            decoration: BoxDecoration(
+              // Sfondo semi-trasparente
+              color: const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(24),
+              // Il tocco magico del Glassmorphism: un bordo sottile e luminoso
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.3),
+                width: 1.5,
               ),
-              const SizedBox(height: 8),
-              Text(
+              // Un gradiente molto leggero per dare profondità al vetro
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color.fromARGB(93, 0, 0, 0).withValues(alpha: 0.2),
+                  Colors.white.withValues(alpha: 0.05),
+                ],
+              ),
+              // Opzionale: un'ombra leggera per staccare la card dallo sfondo
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.4),
+                  blurRadius: 30,
+                  spreadRadius: -5,
+                ),
+              ],
+            ),
+            child: Center(
+              child: Text(
                 titolo,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  color: const Color(0xFFD4AF37),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  color:
+                      Colors.white, // Usa un colore che contrasti con lo sfondo
+                  letterSpacing: 1.2, // Spaziatura elegante
                 ),
               ),
-              Text(
-                'Scopri la selezione',
-                style: GoogleFonts.poppins(
-                  fontSize: 11,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

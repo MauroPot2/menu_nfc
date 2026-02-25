@@ -7,6 +7,9 @@ class Drink {
   final double prezzo;
   final String categoria;
   final String? immagineUrl;
+  final bool isAvailable;
+  final int popolarita;
+  final List<String> ingredienti;
 
   Drink({
     required this.id,
@@ -15,6 +18,9 @@ class Drink {
     required this.prezzo,
     required this.categoria,
     required this.immagineUrl,
+    this.isAvailable = true,
+    this.popolarita = 0,
+    this.ingredienti = const [],
   });
 
   factory Drink.fromFirestore(DocumentSnapshot doc) {
@@ -35,6 +41,12 @@ class Drink {
     }
     // ------------------------------------
 
+    List<String> listaIngredienti = [];
+    if (data['ingredienti'] is List) {
+      listaIngredienti = List<String>.from(data['ingredienti']);
+    }
+
+    // ------------------------------------
     return Drink(
       id: doc.id,
       nome: data['nome'] ?? '',
@@ -42,6 +54,9 @@ class Drink {
       categoria: data['categoria'] ?? '',
       prezzo: prezzoFinale,
       immagineUrl: data['immagineUrl'],
+      isAvailable: data['isAvailable'] ?? true,
+      popolarita: data['popolarita'] ?? 0,
+      ingredienti: listaIngredienti,
     );
   }
 

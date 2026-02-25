@@ -8,13 +8,10 @@ import 'package:lounge_menu_nfc/screens/homepage/section/card_home_page.dart';
 class HomeCategoriesSection extends StatelessWidget {
   const HomeCategoriesSection({super.key});
 
-  // La tua funzione di formattazione integrata nella classe
   String _ottieniLabelBella(String codice) {
     try {
-      // Cerca nell'Enum la corrispondenza e restituisce la label "umana"
       return Categoria.values.firstWhere((e) => e.name == codice).label;
     } catch (e) {
-      // Se non trova nulla (es. dati sporchi su Firebase), restituisce il codice originale
       return codice;
     }
   }
@@ -22,7 +19,6 @@ class HomeCategoriesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      // Cambiato da 'categoria' a 'menu' perché i dati sono lì!
       stream: FirebaseFirestore.instance.collection('menu').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -34,14 +30,14 @@ class HomeCategoriesSection extends StatelessWidget {
           );
         }
 
-        final List<Drink> allDrink = snapshot.data!.docs.map((doc){
+        final List<Drink> allDrink = snapshot.data!.docs.map((doc) {
           return Drink.fromFirestore(doc);
         }).toList();
 
         final listaCategorie = allDrink
-        .map((drink)=> drink.categoria)
-        .toSet()
-        .toList();
+            .map((drink) => drink.categoria)
+            .toSet()
+            .toList();
 
         return SliverPadding(
           padding: const EdgeInsets.all(16),

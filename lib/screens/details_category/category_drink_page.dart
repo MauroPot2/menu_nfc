@@ -72,7 +72,7 @@ class CategoryDrinksPage extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                       ),
                       backgroundColor: const Color(0xFFD4AF37),
-                      duration: const Duration(seconds: 1),
+                      duration: const Duration(seconds: 2),
                     ),
                   );
                 },
