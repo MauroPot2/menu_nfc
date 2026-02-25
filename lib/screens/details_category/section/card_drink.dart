@@ -7,9 +7,9 @@ class DrinkAnimatedCard extends StatefulWidget {
   final VoidCallback onTap; // Gestiamo il click
 
   const DrinkAnimatedCard({
-    super.key, 
-    required this.drink, 
-    required this.onTap
+    super.key,
+    required this.drink,
+    required this.onTap,
   });
 
   @override
@@ -30,16 +30,15 @@ class _DrinkAnimatedCardState extends State<DrinkAnimatedCard>
       duration: const Duration(milliseconds: 800),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
     _controller.forward();
   }
@@ -60,16 +59,21 @@ class _DrinkAnimatedCardState extends State<DrinkAnimatedCard>
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             // Sfondo scuro semitrasparente per far risaltare il testo bianco
-            color: const Color(0xFF2C2C2C).withOpacity(0.6), 
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.white.withOpacity(0.1)),
+            color: const Color(0xFF1A1A1A).withValues(alpha: 0.8),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: Colors.grey.shade300, width: 2.0),
             boxShadow: [
-               BoxShadow(
-                 color: Colors.black.withOpacity(0.2),
-                 blurRadius: 10,
-                 offset: const Offset(0, 5),
-               )
-            ]
+              BoxShadow(
+                color: Colors.grey.withValues(alpha: 0.6),
+                blurRadius: 20,
+                spreadRadius: 2,
+              ),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.5),
+                blurRadius: 10,
+                offset: Offset(0, 5),
+              ),
+            ],
           ),
           child: Material(
             color: Colors.transparent,
@@ -77,7 +81,10 @@ class _DrinkAnimatedCardState extends State<DrinkAnimatedCard>
               onTap: widget.onTap, // Colleghiamo il click qui
               borderRadius: BorderRadius.circular(15),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 15,
+                ),
                 child: Row(
                   children: [
                     // Immagine o Icona
@@ -92,10 +99,13 @@ class _DrinkAnimatedCardState extends State<DrinkAnimatedCard>
                                 fit: BoxFit.cover,
                               )
                             : null,
-                        color: Colors.grey[800],
+                        color: Colors.white,
                       ),
                       child: widget.drink.immagineUrl == null
-                          ? const Icon(Icons.local_bar, color: Color(0xFFD4AF37))
+                          ? const Icon(
+                              Icons.local_bar,
+                              color: Color.fromARGB(255, 118, 117, 116),
+                            )
                           : null,
                     ),
                     const SizedBox(width: 15),
@@ -110,6 +120,13 @@ class _DrinkAnimatedCardState extends State<DrinkAnimatedCard>
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
+                              letterSpacing: 1.5,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.grey.shade400,
+                                  blurRadius: 15,
+                                ),
+                              ],
                             ),
                           ),
                           if (widget.drink.descrizione.isNotEmpty) ...[
@@ -119,8 +136,14 @@ class _DrinkAnimatedCardState extends State<DrinkAnimatedCard>
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
-                                color: Colors.white60, 
-                                fontSize: 12
+                                color: Colors.white,
+                                fontSize: 12,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 15,
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -131,9 +154,12 @@ class _DrinkAnimatedCardState extends State<DrinkAnimatedCard>
                     Text(
                       "€ ${widget.drink.prezzo.toStringAsFixed(2)}",
                       style: GoogleFonts.poppins(
-                        color: const Color(0xFFD4AF37), // Color ORO
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
+                        shadows: [
+                          Shadow(color: Colors.grey.shade400, blurRadius: 15),
+                        ],
                       ),
                     ),
                   ],
