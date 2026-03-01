@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lounge_menu_nfc/models/drink.dart';
+import 'package:lounge_menu_nfc/screens/detail_drink/detail_drink.dart';
 import 'package:lounge_menu_nfc/screens/details_category/section/card_drink.dart';
 import 'package:lounge_menu_nfc/screens/homepage/section/video_background_card.dart';
 
@@ -81,6 +82,12 @@ class CategoryDrinksPage extends StatelessWidget {
                       onTap: () {
                         // Incremento Popolarità
                         Drink.incrementaPopolarita(drink.id);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailDrink(drink: drink),
+                          ),
+                        );
 
                         // Feedback Utente
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -92,7 +99,7 @@ class CategoryDrinksPage extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            backgroundColor: const Color(0xFFD4AF37),
+                            backgroundColor: const Color.fromARGB(255, 122, 122, 121),
                             duration: const Duration(seconds: 2),
                           ),
                         );

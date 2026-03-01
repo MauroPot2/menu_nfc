@@ -16,7 +16,7 @@ class LoungeMenuApp extends StatelessWidget {
         primaryColor: Color.fromARGB(255, 167, 166, 163),
       ),
       // routing
-      initialRoute: '/homepage',
+      initialRoute: '/admin',
       routes: {
         '/admin': (context) => AdminPanel(),
         '/homepage': (context) => HomePage(),

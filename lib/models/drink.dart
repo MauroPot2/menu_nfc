@@ -10,6 +10,7 @@ class Drink {
   final bool isAvailable;
   final int popolarita;
   final List<String> ingredienti;
+  final String? categoriaBottiglieria;
 
   Drink({
     required this.id,
@@ -21,6 +22,7 @@ class Drink {
     this.isAvailable = true,
     this.popolarita = 0,
     this.ingredienti = const [],
+    this.categoriaBottiglieria,
   });
 
   factory Drink.fromFirestore(DocumentSnapshot doc) {
@@ -57,6 +59,7 @@ class Drink {
       isAvailable: data['isAvailable'] ?? true,
       popolarita: data['popolarita'] ?? 0,
       ingredienti: listaIngredienti,
+      categoriaBottiglieria: data['categoriaBottiglieria'],
     );
   }
 
