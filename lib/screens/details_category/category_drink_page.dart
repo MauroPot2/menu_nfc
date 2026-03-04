@@ -18,9 +18,7 @@ class CategoryDrinksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 1. IL TOCCO MAGICO: Estende il corpo dietro la AppBar
       extendBodyBehindAppBar: true,
-      // 2. Sfondo trasparente per far vedere il livello sottostante
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text(
@@ -31,17 +29,13 @@ class CategoryDrinksPage extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
       ),
-      // 3. Usiamo lo Stack per sovrapporre la lista al video
+
       body: Stack(
         children: [
-          // --- LIVELLO 1: IL VIDEO DI SFONDO ---
           const Positioned.fill(child: VideoBackgroundCard()),
 
-          // --- LIVELLO 2: LA LISTA DEI DRINK ---
-          // Usiamo SafeArea per evitare che le card finiscano "sotto" la AppBar trasparente
           SafeArea(
-            bottom:
-                false, // Lasciamo che la lista scorra liberamente fino al bordo inferiore del telefono
+            bottom: false,
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('menu')
@@ -99,7 +93,12 @@ class CategoryDrinksPage extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            backgroundColor: const Color.fromARGB(255, 122, 122, 121),
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              122,
+                              122,
+                              121,
+                            ),
                             duration: const Duration(seconds: 2),
                           ),
                         );

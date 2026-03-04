@@ -18,23 +18,24 @@ class _VideoBackgroundCardState extends State<VideoBackgroundCard> {
     final videoUrl = Uri.parse(
       'https://res.cloudinary.com/dr0q2frm4/video/upload/v1772032008/lounge_bg.mp4',
     );
-    
-    _controller = VideoPlayerController.networkUrl(videoUrl)
-      ..initialize().then((_) {
-        _controller.setVolume(0.0);
-        _controller.play();
-        setState(() {}); 
-      }).catchError((errore){
-        debugPrint('Errore: $errore');
-      });
 
+    _controller = VideoPlayerController.networkUrl(videoUrl)
+      ..initialize()
+          .then((_) {
+            _controller.setVolume(0.0);
+            _controller.play();
+            setState(() {});
+          })
+          .catchError((errore) {
+            debugPrint('Errore: $errore');
+          });
 
     _controller.addListener(() {
       final position = _controller.value.position;
       final duration = _controller.value.duration;
 
       if (duration != Duration.zero &&
-          position >= duration - Duration(milliseconds: 500)) {
+          position >= duration - Duration(milliseconds: 1100)) {
         _controller.seekTo(Duration.zero);
       }
     });
@@ -42,13 +43,12 @@ class _VideoBackgroundCardState extends State<VideoBackgroundCard> {
 
   @override
   void dispose() {
-    _controller.dispose(); 
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
@@ -69,9 +69,7 @@ class _VideoBackgroundCardState extends State<VideoBackgroundCard> {
               ),
             )
           else
-            const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            ), 
+            const Center(child: CircularProgressIndicator(color: Colors.white)),
           Container(color: Colors.black.withValues(alpha: 0.4)),
         ],
       ),

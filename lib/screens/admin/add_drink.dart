@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lounge_menu_nfc/screens/admin/admin_panel.dart';
 import 'package:lounge_menu_nfc/screens/admin/section/delete_button.dart';
 import 'package:lounge_menu_nfc/screens/admin/section/hide_button.dart';
 import '../../models/categoria.dart';

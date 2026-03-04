@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
         children: [
           const Positioned.fill(child: VideoBackgroundCard()),
 
-          // --- LIVELLO 2: IL CONTENUTO SCORREVOLE ---
+          
           SafeArea(
             child: CustomScrollView(
               slivers: [const HeaderLogo(), const HomeCategoriesSection()],

@@ -13,40 +13,148 @@ class AddBottle extends StatefulWidget {
 class _AddBottleState extends State<AddBottle> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _sovrapprezzoController = TextEditingController();
-  
-  // Lista delle categorie per la bottiglieria
-  final List<String> _categorieBottiglieria = [
-    'Gin', 'Rum', 'Vodka', 'Tequila', 'Whisky', 'Mezcal', 'Amari'
-  ];
-  String _categoriaSelezionata = 'Gin'; // Valore di default
+  final TextEditingController _nuovaCategoriaController =
+      TextEditingController();
+
+  String? _categoriaSelezionata;
+
+  // AGGIUNTO: Metodo per liberare la memoria dei controller
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _sovrapprezzoController.dispose();
+    _nuovaCategoriaController.dispose();
+    super.dispose();
+  }
+
+  void _popolaCategorieIniziali() async {
+    // 1. La tua lista di categorie base
+    List<String> categorieIniziali = [
+      "Gin",
+      "Rum",
+      "Vodka",
+      "Tequila",
+      "Whisky",
+      "Cognac & Brandy",
+      "Amari",
+      "Liquori Dolci",
+      "Vermouth",
+      "Bollicine",
+      "Champagne",
+      "Vini Bianchi",
+      "Vini Rossi",
+      "Birre Artigianali",
+      "Soft Drinks",
+      "Toniche Premium",
+    ];
+
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    // 2. Creiamo un "Batch" (un pacchetto di operazioni)
+    WriteBatch batch = db.batch();
+
+    // 3. Prepariamo un documento per ogni categoria
+    for (String categoria in categorieIniziali) {
+      // Usiamo il nome esatto come ID del documento per evitare duplicati
+      DocumentReference docRef = db
+          .collection('categoria_bottiglieria')
+          .doc(categoria);
+      batch.set(docRef, {'categoria': categoria});
+    }
+
+    // 4. Inviamo tutto a Firebase in un colpo solo!
+    try {
+      await batch.commit();
+
+      // Mostriamo un avviso a schermo quando ha finito
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ Tutte le categorie caricate con successo!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      print("❌ Errore durante il caricamento massivo: $e");
+    }
+  }
 
   void _aggiungiBottiglia() async {
-    if (_nomeController.text.isEmpty || _sovrapprezzoController.text.isEmpty) return;
+    if (_nomeController.text.isEmpty || _sovrapprezzoController.text.isEmpty)
+      return;
 
-    double priceDouble = double.tryParse(_sovrapprezzoController.text.replaceAll(',', '.')) ?? 0.0;
+    double priceDouble =
+        double.tryParse(_sovrapprezzoController.text.replaceAll(',', '.')) ??
+        0.0;
 
-    // Struttura dati allineata alla classe Bottle creata prima
     Map<String, dynamic> nuovaBottiglia = {
       'nome': _nomeController.text,
       'categoria': _categoriaSelezionata,
       'sovrapprezzo': priceDouble,
-      'disponibile': true, // Di default quando la inserisci è disponibile
+      'disponibile': true,
       'timestamp': FieldValue.serverTimestamp(),
     };
 
     try {
-      // Salviamo nella NUOVA collezione
-      await FirebaseFirestore.instance.collection('bottiglieria').add(nuovaBottiglia);
+      await FirebaseFirestore.instance
+          .collection('bottiglieria')
+          .add(nuovaBottiglia);
 
-      // Pulizia dei campi dopo l'inserimento
       _nomeController.clear();
       _sovrapprezzoController.clear();
-      
-      // Ricarichiamo la UI per sicurezza (opzionale)
-      setState(() {});
+      // RIMOSSO: setState(() {}); non è più necessario
     } catch (e) {
       print('Errore durante il salvataggio: $e');
     }
+  }
+
+  Future<void> _mostraDialogNuovaCategoria(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Nuova Categoria'),
+          content: TextField(
+            controller: _nuovaCategoriaController,
+            decoration: const InputDecoration(
+              hintText: "Es. Gin, Rum, Vodka...",
+            ),
+            autofocus: true,
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Annulla'),
+              onPressed: () {
+                _nuovaCategoriaController.clear();
+                Navigator.pop(context);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Aggiungi'),
+              onPressed: () async {
+                if (_nuovaCategoriaController.text.trim().isNotEmpty) {
+                  String nuovaCat = _nuovaCategoriaController.text.trim();
+
+                  // Salva nella collezione dedicata alle categorie
+                  await FirebaseFirestore.instance
+                      .collection('categoria_bottiglieria')
+                      .doc(nuovaCat)
+                      .set({'categoria': nuovaCat});
+
+                  setState(() {
+                    _categoriaSelezionata = nuovaCat;
+                  });
+
+                  _nuovaCategoriaController.clear();
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -72,29 +180,79 @@ class _AddBottleState extends State<AddBottle> {
                     decoration: const InputDecoration(
                       labelText: "Sovrapprezzo (es. 5.00)",
                     ),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  ),
-
-                  // MENU A DISCESA PER LE CATEGORIE DELLA BOTTIGLIERIA
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: const Text("Categoria Alcolico:"),
-                    trailing: DropdownButton<String>(
-                      value: _categoriaSelezionata,
-                      onChanged: (String? nuovoValore) {
-                        if (nuovoValore != null) {
-                          setState(() {
-                            _categoriaSelezionata = nuovoValore;
-                          });
-                        }
-                      },
-                      items: _categorieBottiglieria.map((String cat) {
-                        return DropdownMenuItem<String>(
-                          value: cat,
-                          child: Text(cat),
-                        );
-                      }).toList(),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
                     ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('categoria_bottiglieria')
+                        .orderBy('categoria')
+                        .snapshots(),
+                    builder: (context, asyncSnapshot) {
+                      if (asyncSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (asyncSnapshot.hasError) {
+                        return const Text("Errore nel caricamento categorie");
+                      }
+                      if (!asyncSnapshot.hasData ||
+                          asyncSnapshot.data!.docs.isEmpty) {
+                        return const Text("Nessuna categoria trovata");
+                      }
+
+                      // Ora asyncSnapshot esiste ed è pieno di dati
+                      List<String> _categoryBottle = asyncSnapshot.data!.docs
+                          .map((doc) {
+                            return doc['categoria'].toString();
+                          })
+                          .toSet()
+                          .toList(); // toSet().toList() rimuove i duplicati in automatico!
+
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: const Text("Categoria Alcolico:"),
+                        trailing: Row(
+                          mainAxisSize: .min,
+                          children: [
+                            DropdownButton<String>(
+                              value:
+                                  _categoryBottle.contains(
+                                    _categoriaSelezionata,
+                                  )
+                                  ? _categoriaSelezionata
+                                  : null, // Evita errori se la categoria selezionata scompare
+                              hint: const Text("Seleziona"),
+                              onChanged: (String? nuovoValore) {
+                                if (nuovoValore != null) {
+                                  setState(() {
+                                    _categoriaSelezionata = nuovoValore;
+                                  });
+                                }
+                              },
+                              items: _categoryBottle.map((String cat) {
+                                return DropdownMenuItem<String>(
+                                  value: cat,
+                                  child: Text(cat),
+                                );
+                              }).toList(),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.add_circle,
+                                color: Colors.blue,
+                              ),
+                              onPressed: () =>
+                                  _mostraDialogNuovaCategoria(context),
+                              tooltip: "Aggiungi nuova categoria",
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 10),
@@ -104,6 +262,14 @@ class _AddBottleState extends State<AddBottle> {
                       minimumSize: const Size(double.infinity, 45),
                     ),
                     child: const Text("Aggiungi Bottiglia al Magazzino"),
+                  ),
+                  SizedBox(height: 3),
+                  ElevatedButton(
+                    onPressed: _popolaCategorieIniziali,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 45),
+                    ),
+                    child: const Text("Popola Magazzino"),
                   ),
                 ],
               ),
@@ -124,7 +290,9 @@ class _AddBottleState extends State<AddBottle> {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('bottiglieria')
-                  .orderBy('categoria') // Ordinato per categoria per pulizia visiva
+                  .orderBy(
+                    'categoria',
+                  ) // Ordinato per categoria per pulizia visiva
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
