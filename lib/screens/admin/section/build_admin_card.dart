@@ -20,9 +20,7 @@ class BuildAdminCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       // ClipRRect assicura che l'effetto "click" non esca dai bordi arrotondati
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
@@ -31,10 +29,7 @@ class BuildAdminCart extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  color.withOpacity(0.7),
-                  color,
-                ],
+                colors: [color.withOpacity(0.7), color],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -42,11 +37,7 @@ class BuildAdminCart extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  icon,
-                  size: 48,
-                  color: Colors.white,
-                ),
+                Icon(icon, size: 48, color: Colors.white),
                 const SizedBox(height: 12),
                 Text(
                   title,

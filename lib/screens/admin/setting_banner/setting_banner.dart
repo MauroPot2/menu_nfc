@@ -64,11 +64,11 @@ class _SettingBannerState extends State<SettingBanner> {
           .collection('impostazioni')
           .doc('banner_home')
           .set({
-        'banner_attivo': _isBannerActive,
-        'banner_testo': _bannerTextController.text,
-        'ticker_attivo': _isTickerActive,
-        'ticker_testo': _tickerTextController.text,
-      }, SetOptions(merge: true)); // merge: true crea il doc se non esiste
+            'banner_attivo': _isBannerActive,
+            'banner_testo': _bannerTextController.text,
+            'ticker_attivo': _isTickerActive,
+            'ticker_testo': _tickerTextController.text,
+          }, SetOptions(merge: true)); // merge: true crea il doc se non esiste
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -86,9 +86,7 @@ class _SettingBannerState extends State<SettingBanner> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -99,7 +97,7 @@ class _SettingBannerState extends State<SettingBanner> {
             icon: const Icon(Icons.save),
             onPressed: _salvaImpostazioni,
             tooltip: "Salva Modifiche",
-          )
+          ),
         ],
       ),
       body: ListView(
@@ -108,7 +106,11 @@ class _SettingBannerState extends State<SettingBanner> {
           // SEZIONE 1: BANNER PRINCIPALE (Fisso)
           const Text(
             "Banner Statico (Offerte)",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.amber,
+            ),
           ),
           const SizedBox(height: 10),
           Card(
@@ -119,7 +121,9 @@ class _SettingBannerState extends State<SettingBanner> {
                 children: [
                   SwitchListTile(
                     title: const Text("Mostra Banner in Home"),
-                    subtitle: const Text("Accende o spegne l'offerta principale"),
+                    subtitle: const Text(
+                      "Accende o spegne l'offerta principale",
+                    ),
                     activeColor: Colors.amber,
                     value: _isBannerActive,
                     onChanged: (bool value) {
@@ -139,7 +143,7 @@ class _SettingBannerState extends State<SettingBanner> {
                       ),
                       maxLines: 2,
                     ),
-                  ]
+                  ],
                 ],
               ),
             ),
@@ -150,7 +154,11 @@ class _SettingBannerState extends State<SettingBanner> {
           // SEZIONE 2: TICKER SCORREVOLE (Effetto SkySport24)
           const Text(
             "Ticker Scorrevole (News)",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.amber,
+            ),
           ),
           const SizedBox(height: 10),
           Card(
@@ -161,7 +169,9 @@ class _SettingBannerState extends State<SettingBanner> {
                 children: [
                   SwitchListTile(
                     title: const Text("Mostra Testo Scorrevole"),
-                    subtitle: const Text("News continue in fondo o in cima allo schermo"),
+                    subtitle: const Text(
+                      "News continue in fondo o in cima allo schermo",
+                    ),
                     activeColor: Colors.amber,
                     value: _isTickerActive,
                     onChanged: (bool value) {
@@ -176,12 +186,13 @@ class _SettingBannerState extends State<SettingBanner> {
                       controller: _tickerTextController,
                       decoration: const InputDecoration(
                         labelText: "Testo della News",
-                        hintText: "Es: Venerdì serata speciale... Prenotazioni aperte...",
+                        hintText:
+                            "Es: Venerdì serata speciale... Prenotazioni aperte...",
                         border: OutlineInputBorder(),
                       ),
                       maxLines: 3,
                     ),
-                  ]
+                  ],
                 ],
               ),
             ),
@@ -195,7 +206,10 @@ class _SettingBannerState extends State<SettingBanner> {
               foregroundColor: Colors.black,
             ),
             onPressed: _salvaImpostazioni,
-            child: const Text("SALVA E PUBBLICA", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            child: const Text(
+              "SALVA E PUBBLICA",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ),
         ],
       ),

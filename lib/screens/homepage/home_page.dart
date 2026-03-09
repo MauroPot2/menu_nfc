@@ -14,21 +14,17 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      // Lo StreamBuilder ascolta il "telecomando" su Firebase in tempo reale
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('impostazioni')
             .doc('banner_home')
             .snapshots(),
         builder: (context, snapshot) {
-          
-          // Variabili di default in caso di caricamento o mancanza di dati
           bool showBanner = false;
           String bannerText = '';
           bool showTicker = false;
           String tickerText = '';
 
-          // Estraiamo i dati se il documento esiste
           if (snapshot.hasData && snapshot.data!.exists) {
             var data = snapshot.data!.data() as Map<String, dynamic>;
             showBanner = data['banner_attivo'] ?? false;
@@ -39,25 +35,27 @@ class HomePage extends StatelessWidget {
 
           return Stack(
             children: [
-              // 1. Lo sfondo animato (essendo const, non si ricarica inutilmente)
               const Positioned.fill(child: VideoBackgroundCard()),
 
-              // 2. Il contenuto scorrevole principale
               SafeArea(
                 child: CustomScrollView(
                   slivers: [
                     const HeaderLogo(),
-                    
-                    // BANNER STATICO (Appare solo se attivo dal pannello Admin)
+
                     if (showBanner && bannerText.isNotEmpty)
                       SliverToBoxAdapter(
                         child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            // Stile elegante dorato
                             gradient: LinearGradient(
-                              colors: [Colors.amber.shade700, Colors.amber.shade400],
+                              colors: [
+                                Colors.amber.shade700,
+                                Colors.amber.shade400,
+                              ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
@@ -72,7 +70,11 @@ class HomePage extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.local_offer_rounded, color: Colors.black87, size: 28),
+                              const Icon(
+                                Icons.local_offer_rounded,
+                                color: Colors.black87,
+                                size: 28,
+                              ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
@@ -90,16 +92,13 @@ class HomePage extends StatelessWidget {
                       ),
 
                     const HomeCategoriesSection(),
-                    
-                    // Aggiungiamo un po' di spazio in fondo per non far coprire l'ultima
-                    // categoria dal ticker scorrevole (se attivo)
+
                     if (showTicker && tickerText.isNotEmpty)
                       const SliverToBoxAdapter(child: SizedBox(height: 50)),
                   ],
                 ),
               ),
 
-              // 3. TICKER SCORREVOLE (Fissato in basso stile SkySport)
               if (showTicker && tickerText.isNotEmpty)
                 Positioned(
                   bottom: 0,
@@ -123,8 +122,9 @@ class HomePage extends StatelessWidget {
                       ),
                       scrollAxis: Axis.horizontal,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      blankSpace: 100.0, // Spazio vuoto prima che la frase ricominci
-                      velocity: 40.0,    // Velocità di scorrimento (regolabile)
+                      blankSpace:
+                          100.0, // Spazio vuoto prima che la frase ricominci
+                      velocity: 40.0, // Velocità di scorrimento (regolabile)
                       startPadding: 10.0,
                     ),
                   ),

@@ -47,12 +47,11 @@ class CardHomePage extends StatelessWidget {
                 style: GoogleFonts.montserrat(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
-                  color:
-                      Colors.white, 
+                  color: Colors.white,
                   letterSpacing: 1.2,
                   shadows: [
                     Shadow(color: Colors.grey.shade400, blurRadius: 15),
-                  ], 
+                  ],
                 ),
               ),
             ),

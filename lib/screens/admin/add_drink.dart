@@ -16,6 +16,7 @@ class _AddDrinkState extends State<AddDrink> {
   final TextEditingController _ingredientiController = TextEditingController();
   // default cocktail
   Categoria _categoriaSelezionata = Categoria.cocktail;
+  Categoria? _filtroAttivo;
 
   void _aggiungiDrink() async {
     if (_nomeController.text.isEmpty || _prezzoController.text.isEmpty) return;
@@ -138,14 +139,50 @@ class _AddDrinkState extends State<AddDrink> {
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
             ),
           ),
-
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  // Chip per "Tutti"
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: ChoiceChip(
+                      label: Text("Tutti"),
+                      selected: _filtroAttivo == null,
+                      onSelected: (_) => setState(() => _filtroAttivo = null),
+                    ),
+                  ),
+                  // Genera un Chip per ogni categoria esistente
+                  ...Categoria.values.map((cat) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: ChoiceChip(
+                        label: Text(cat.label),
+                        selected: _filtroAttivo == cat,
+                        onSelected: (selected) {
+                          setState(() => _filtroAttivo = selected ? cat : null);
+                        },
+                      ),
+                    );
+                  }).toList(),
+                ],
+              ),
+            ),
+          ),
           //dati da firebase
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('menu')
-                  .orderBy('timestamp', descending: true)
-                  .snapshots(),
+              stream: _filtroAttivo == null
+                  ? FirebaseFirestore.instance
+                        .collection('menu')
+                        .orderBy('timestamp', descending: true)
+                        .snapshots()
+                  : FirebaseFirestore.instance
+                        .collection('menu')
+                        .where('categoria', isEqualTo: _filtroAttivo!.name)
+                        .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());
