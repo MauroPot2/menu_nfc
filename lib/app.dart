@@ -16,11 +16,11 @@ class LoungeMenuApp extends StatelessWidget {
         primaryColor: Color.fromARGB(255, 167, 166, 163),
       ),
       // routing
-      initialRoute: '/admin',
+      initialRoute: '/login',
       routes: {
         '/admin': (context) => AdminPanel(),
         '/homepage': (context) => HomePage(),
-        '/login': (context) => LoginPanel(),
+        '/login': (context) => LoginForm(),
       },
     );
   }

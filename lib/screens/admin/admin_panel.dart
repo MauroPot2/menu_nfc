@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lounge_menu_nfc/screens/admin/add_bottle.dart';
 import 'package:lounge_menu_nfc/screens/admin/add_drink.dart';
 import 'package:lounge_menu_nfc/screens/admin/section/build_admin_card.dart';
+import 'package:lounge_menu_nfc/screens/admin/setting_banner/setting_banner.dart';
 import 'package:lounge_menu_nfc/screens/homepage/home_page.dart';
 
 class AdminPanel extends StatelessWidget {
@@ -59,11 +60,14 @@ class AdminPanel extends StatelessWidget {
             ),
             BuildAdminCart(
               context: context,
-              title: 'Categorie',
+              title: 'Impostazioni Banner',
               icon: Icons.category,
               color: Colors.purpleAccent,
               onTap: () {
-                //? Sostituire con la pagina Categorie
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingBanner()),
+                );
               },
             ),
             BuildAdminCart(

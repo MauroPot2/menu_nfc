@@ -38,6 +38,8 @@ dependencies:
   cloud_firestore: ^6.1.2
   google_fonts: ^8.0.1
   video_player: ^2.11.0
+  marquee: ^2.3.0
+  firebase_auth: ^6.2.0
 
 dev_dependencies:
   flutter_test:
