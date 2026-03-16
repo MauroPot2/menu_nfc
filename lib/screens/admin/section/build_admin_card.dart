@@ -29,7 +29,7 @@ class BuildAdminCart extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [color.withOpacity(0.7), color],
+                colors: [color.withValues(alpha: 0.7), color],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),

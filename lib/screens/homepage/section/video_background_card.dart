@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoBackgroundCard extends StatefulWidget {
-  const VideoBackgroundCard({Key? key}) : super(key: key);
+  const VideoBackgroundCard({super.key});
 
   @override
   State<VideoBackgroundCard> createState() => _VideoBackgroundCardState();

@@ -49,7 +49,7 @@ class _SettingBannerState extends State<SettingBanner> {
         });
       }
     } catch (e) {
-      print("Errore nel caricamento impostazioni: $e");
+      debugPrint("Errore nel caricamento impostazioni: $e");
     } finally {
       setState(() {
         _isLoading = false;
@@ -79,7 +79,7 @@ class _SettingBannerState extends State<SettingBanner> {
         );
       }
     } catch (e) {
-      print("Errore nel salvataggio: $e");
+      debugPrint("Errore nel salvataggio: $e");
     }
   }
 
@@ -124,7 +124,7 @@ class _SettingBannerState extends State<SettingBanner> {
                     subtitle: const Text(
                       "Accende o spegne l'offerta principale",
                     ),
-                    activeColor: Colors.amber,
+                    activeThumbColor: Colors.amber,
                     value: _isBannerActive,
                     onChanged: (bool value) {
                       setState(() {
@@ -172,7 +172,7 @@ class _SettingBannerState extends State<SettingBanner> {
                     subtitle: const Text(
                       "News continue in fondo o in cima allo schermo",
                     ),
-                    activeColor: Colors.amber,
+                    activeThumbColor: Colors.amber,
                     value: _isTickerActive,
                     onChanged: (bool value) {
                       setState(() {

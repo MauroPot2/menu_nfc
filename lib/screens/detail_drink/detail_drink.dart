@@ -160,8 +160,9 @@ class _DetailDrinkState extends State<DetailDrink> {
                                 }
 
                                 final opzioni = snapshot.data!.docs;
-                                if (opzioni.isEmpty)
+                                if (opzioni.isEmpty) {
                                   return const SizedBox.shrink();
+                                }
 
                                 return Wrap(
                                   spacing: 12,
@@ -224,8 +225,7 @@ class _DetailDrinkState extends State<DetailDrink> {
                             ),
                           ],
                         );
-                      })
-                      .toList(),
+                      }),
 
                   // Spazio finale per non coprire l'ultimo elemento col bottone
                   const SizedBox(height: 100),

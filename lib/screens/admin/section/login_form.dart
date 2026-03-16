@@ -25,7 +25,6 @@ class LoginForm extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
                   onPressed: () {
-                    print('login ok');
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => AdminPanel()),

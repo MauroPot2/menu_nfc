@@ -5,11 +5,13 @@ import 'package:lounge_menu_nfc/screens/admin/section/hide_button.dart';
 import '../../models/categoria.dart';
 
 class AddDrink extends StatefulWidget {
+  const AddDrink({super.key});
+
   @override
-  _AddDrinkState createState() => _AddDrinkState();
+  AddDrinkState createState() => AddDrinkState();
 }
 
-class _AddDrinkState extends State<AddDrink> {
+class AddDrinkState extends State<AddDrink> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _prezzoController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
@@ -54,7 +56,7 @@ class _AddDrinkState extends State<AddDrink> {
       // Opzionale: reset categoria dopo l'invio
       setState(() {});
     } catch (e) {
-      print('Errore durante il salvataggio: $e');
+      debugPrint('Errore durante il salvataggio: $e');
     }
   }
 
@@ -166,7 +168,7 @@ class _AddDrinkState extends State<AddDrink> {
                         },
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),

@@ -7,10 +7,10 @@ class AddBottle extends StatefulWidget {
   const AddBottle({super.key});
 
   @override
-  _AddBottleState createState() => _AddBottleState();
+  AddBottleState createState() => AddBottleState();
 }
 
-class _AddBottleState extends State<AddBottle> {
+class AddBottleState extends State<AddBottle> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _sovrapprezzoController = TextEditingController();
   final TextEditingController _nuovaCategoriaController =
@@ -76,13 +76,14 @@ class _AddBottleState extends State<AddBottle> {
         );
       }
     } catch (e) {
-      print("❌ Errore durante il caricamento massivo: $e");
+      debugPrint("❌ Errore durante il caricamento massivo: $e");
     }
   }
 
   void _aggiungiBottiglia() async {
-    if (_nomeController.text.isEmpty || _sovrapprezzoController.text.isEmpty)
+    if (_nomeController.text.isEmpty || _sovrapprezzoController.text.isEmpty) {
       return;
+    }
 
     double priceDouble =
         double.tryParse(_sovrapprezzoController.text.replaceAll(',', '.')) ??
@@ -105,7 +106,7 @@ class _AddBottleState extends State<AddBottle> {
       _sovrapprezzoController.clear();
       // RIMOSSO: setState(() {}); non è più necessario
     } catch (e) {
-      print('Errore durante il salvataggio: $e');
+      debugPrint('Errore durante il salvataggio: $e');
     }
   }
 
@@ -147,7 +148,9 @@ class _AddBottleState extends State<AddBottle> {
                   });
 
                   _nuovaCategoriaController.clear();
-                  Navigator.pop(context);
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
                 }
               },
             ),
@@ -205,7 +208,7 @@ class _AddBottleState extends State<AddBottle> {
                       }
 
                       // Ora asyncSnapshot esiste ed è pieno di dati
-                      List<String> _categoryBottle = asyncSnapshot.data!.docs
+                      List<String> categoryBottleList = asyncSnapshot.data!.docs
                           .map((doc) {
                             return doc['categoria'].toString();
                           })
@@ -220,7 +223,7 @@ class _AddBottleState extends State<AddBottle> {
                           children: [
                             DropdownButton<String>(
                               value:
-                                  _categoryBottle.contains(
+                                  categoryBottleList.contains(
                                     _categoriaSelezionata,
                                   )
                                   ? _categoriaSelezionata
@@ -233,7 +236,7 @@ class _AddBottleState extends State<AddBottle> {
                                   });
                                 }
                               },
-                              items: _categoryBottle.map((String cat) {
+                              items: categoryBottleList.map((String cat) {
                                 return DropdownMenuItem<String>(
                                   value: cat,
                                   child: Text(cat),

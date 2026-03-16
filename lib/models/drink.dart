@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class Drink {
   final String id;
@@ -69,7 +70,8 @@ class Drink {
         'popolarita': FieldValue.increment(1),
       });
     } catch (e) {
-      print('Errore durante l\'incremento: $e');
+      debugPrint('Errore durante l\'incremento: $e');
     }
   }
 }
+
