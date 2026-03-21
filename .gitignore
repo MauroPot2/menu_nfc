@@ -1,5 +1,6 @@
 #credential
 firebase_options_manual.dart
+.firebase/
 
 # Miscellaneous
 *.class
